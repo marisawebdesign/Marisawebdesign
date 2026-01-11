@@ -107,11 +107,25 @@
             color: var(--warm-gray);
         }
 
+        .botanical-bg {
+            position: absolute;
+            left: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 650px;
+            height: 750px;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+
         .headline {
             font-family: 'Bebas Neue', sans-serif;
             font-size: clamp(4rem, 10vw, 8rem);
             line-height: 0.9;
             margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
         }
 
         .headline span {
@@ -131,12 +145,16 @@
             margin-bottom: 50px;
             color: var(--charcoal);
             font-weight: 400;
+            position: relative;
+            z-index: 1;
         }
 
         .cta-group {
             display: flex;
             gap: 20px;
             align-items: center;
+            position: relative;
+            z-index: 1;
         }
 
         .cta-primary {
@@ -486,6 +504,43 @@
         </nav>
 
         <div class="hero-left">
+            <!-- Botanical Background -->
+            <svg class="botanical-bg" viewBox="0 0 500 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Left tall grass/reed -->
+                <path d="M80 50 Q75 150 80 250 Q85 350 80 500" stroke="#2d5f3f" stroke-width="1.5" fill="none"/>
+                <path d="M80 50 L70 80 M80 120 L88 150 M80 180 L72 210 M80 250 L88 280" stroke="#2d5f3f" stroke-width="1" fill="none"/>
+
+                <!-- Center monstera-style leaf -->
+                <path d="M250 200 Q280 220 290 250 Q295 280 280 310 Q260 330 230 325 Q200 320 190 290 Q185 260 200 230 Q220 205 250 200 Z" stroke="#2d5f3f" stroke-width="1.5" fill="none"/>
+                <path d="M250 200 L240 270 M250 200 L260 270 M250 200 L280 250 M250 200 L220 250" stroke="#2d5f3f" stroke-width="1" fill="none"/>
+                <circle cx="225" cy="245" r="8" stroke="#2d5f3f" stroke-width="1" fill="none"/>
+                <circle cx="270" cy="260" r="6" stroke="#2d5f3f" stroke-width="1" fill="none"/>
+
+                <!-- Right tall botanical stem -->
+                <path d="M380 80 Q375 180 380 280 Q385 380 380 520" stroke="#2d5f3f" stroke-width="1.5" fill="none"/>
+                <ellipse cx="360" cy="140" rx="15" ry="25" stroke="#2d5f3f" stroke-width="1" fill="none" transform="rotate(-20 360 140)"/>
+                <ellipse cx="400" cy="200" rx="18" ry="30" stroke="#2d5f3f" stroke-width="1" fill="none" transform="rotate(25 400 200)"/>
+                <ellipse cx="365" cy="270" rx="16" ry="28" stroke="#2d5f3f" stroke-width="1" fill="none" transform="rotate(-15 365 270)"/>
+                <ellipse cx="395" cy="340" rx="14" ry="24" stroke="#2d5f3f" stroke-width="1" fill="none" transform="rotate(20 395 340)"/>
+
+                <!-- Bottom left fern-like plant -->
+                <path d="M120 400 Q130 420 140 450 Q145 480 150 520" stroke="#2d5f3f" stroke-width="1.5" fill="none"/>
+                <path d="M120 410 Q105 415 95 420 M130 440 Q115 448 105 455 M140 470 Q125 478 115 485" stroke="#2d5f3f" stroke-width="1" fill="none"/>
+                <path d="M125 415 Q140 420 150 425 M135 445 Q150 453 160 460 M145 475 Q160 483 170 490" stroke="#2d5f3f" stroke-width="1" fill="none"/>
+
+                <!-- Delicate curling vine top right -->
+                <path d="M420 100 Q435 110 440 125 Q442 140 435 150 Q425 155 415 150" stroke="#2d5f3f" stroke-width="1" fill="none"/>
+                <circle cx="430" cy="130" r="3" stroke="#2d5f3f" stroke-width="0.8" fill="none"/>
+                <circle cx="420" cy="145" r="2.5" stroke="#2d5f3f" stroke-width="0.8" fill="none"/>
+
+                <!-- Simple leaf sprigs scattered -->
+                <path d="M180 380 L190 400 L180 420" stroke="#2d5f3f" stroke-width="1" fill="none"/>
+                <ellipse cx="195" cy="400" rx="8" ry="15" stroke="#2d5f3f" stroke-width="1" fill="none" transform="rotate(45 195 400)"/>
+
+                <path d="M320 150 L310 130 L300 150" stroke="#2d5f3f" stroke-width="1" fill="none"/>
+                <ellipse cx="305" cy="135" rx="6" ry="12" stroke="#2d5f3f" stroke-width="1" fill="none" transform="rotate(-30 305 135)"/>
+            </svg>
+
             <p class="tagline"></p>
             <h1 class="headline">
                 <span>WE BUILD</span>
