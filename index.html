@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Design Hero</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #faf7f4;
+            --charcoal: #2d2926;
+            --dark-bg: #1e1b19;
+            --dusty-rose: #c9a9a6;
+            --terracotta: #c4785a;
+            --warm-gray: #6b5f5b;
+            --black: #0a0908;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: var(--cream);
+            color: var(--black);
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+        }
+
+        .hero-left {
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-right {
+            background: var(--dark-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav {
+            position: absolute;
+            top: 40px;
+            left: 60px;
+            right: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.1em;
+            border: 3px solid var(--black);
+            padding: 8px 16px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: var(--black);
+            text-decoration: none;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--terracotta);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .tagline {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            margin-bottom: 30px;
+            color: var(--warm-gray);
+        }
+
+        .headline {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(4rem, 10vw, 8rem);
+            line-height: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .headline span {
+            display: block;
+        }
+
+        .headline .accent {
+            color: var(--terracotta);
+            -webkit-text-stroke: 2px var(--terracotta);
+            -webkit-text-fill-color: transparent;
+        }
+
+        .description {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            max-width: 400px;
+            margin-bottom: 50px;
+            color: var(--warm-gray);
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .cta-primary {
+            background: var(--black);
+            color: var(--cream);
+            border: none;
+            padding: 18px 30px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .cta-primary:hover {
+            transform: translate(-4px, -4px);
+        }
+
+        .cta-primary::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--black);
+            z-index: -1;
+            transition: all 0.2s ease;
+        }
+
+        .cta-primary:hover::after {
+            top: 8px;
+            left: 8px;
+        }
+
+        .cta-secondary {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--warm-gray);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-secondary:hover {
+            color: var(--terracotta);
+        }
+
+        /* Right Side */
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(250,247,244,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(250,247,244,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Geometric Flower Container */
+        .geometric-container {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .geometric-flower {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        .geo-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Outer rotating squares */
+        .layer-1 {
+            width: 320px;
+            height: 320px;
+            animation: rotate-cw 50s linear infinite;
+        }
+
+        .layer-2 {
+            width: 260px;
+            height: 260px;
+            animation: rotate-ccw 40s linear infinite;
+        }
+
+        .layer-3 {
+            width: 180px;
+            height: 180px;
+            animation: rotate-cw 30s linear infinite;
+        }
+
+        .layer-4 {
+            width: 100px;
+            height: 100px;
+            animation: rotate-ccw 20s linear infinite;
+        }
+
+        @keyframes rotate-cw {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes rotate-ccw {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(-360deg); }
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 60px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .scroll-line {
+            width: 60px;
+            height: 1px;
+            background: var(--black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 100%;
+            background: var(--terracotta);
+            animation: scroll 2s ease-in-out infinite;
+        }
+
+        @keyframes scroll {
+            0%, 100% { transform: translateX(-20px); }
+            50% { transform: translateX(60px); }
+        }
+
+        /* Portfolio Module - Slides over the geometric design */
+        .portfolio-module {
+            position: absolute;
+            inset: 30px;
+            background: rgba(30, 27, 25, 0.97);
+            border: 1px solid rgba(201, 169, 166, 0.2);
+            border-radius: 8px;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .portfolio-module.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        .portfolio-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 30px;
+            border-bottom: 1px solid rgba(201, 169, 166, 0.15);
+        }
+
+        .portfolio-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.1em;
+            color: var(--cream);
+        }
+
+        .portfolio-close {
+            background: none;
+            border: 1px solid rgba(201, 169, 166, 0.3);
+            color: var(--dusty-rose);
+            width: 36px;
+            height: 36px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .portfolio-close:hover {
+            border-color: var(--terracotta);
+            color: var(--terracotta);
+            background: rgba(196, 120, 90, 0.1);
+        }
+
+        .portfolio-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .portfolio-item {
+            background: rgba(45, 41, 38, 0.6);
+            border: 1px solid rgba(201, 169, 166, 0.1);
+            border-radius: 6px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        .portfolio-item:hover {
+            background: rgba(45, 41, 38, 0.9);
+            border-color: rgba(196, 120, 90, 0.3);
+            transform: translateX(5px);
+        }
+
+        .portfolio-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .portfolio-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 0.05em;
+            color: var(--cream);
+        }
+
+        .portfolio-arrow {
+            color: var(--terracotta);
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-item:hover .portfolio-arrow {
+            transform: translateX(5px);
+        }
+
+        .portfolio-type {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--terracotta);
+            margin-bottom: 12px;
+        }
+
+        .portfolio-desc {
+            font-size: 0.75rem;
+            line-height: 1.7;
+            color: var(--warm-gray);
+        }
+
+        /* Browse Button - Bottom right corner */
+        .browse-btn {
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            background: transparent;
+            border: 1px solid var(--dusty-rose);
+            color: var(--dusty-rose);
+            padding: 14px 28px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 15;
+        }
+
+        .browse-btn:hover {
+            background: var(--dusty-rose);
+            color: var(--dark-bg);
+        }
+
+        .browse-btn.hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+            .hero-right {
+                min-height: 50vh;
+            }
+            .hero-left {
+                padding: 120px 30px 60px;
+            }
+            .nav {
+                left: 30px;
+                right: 30px;
+            }
+            .scroll-indicator {
+                left: 30px;
+            }
+            .geometric-flower {
+                width: 280px;
+                height: 280px;
+            }
+            .browse-btn {
+                bottom: 30px;
+                right: 30px;
+            }
+            .portfolio-module {
+                inset: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <nav class="nav">
+            <div class="logo">MARISA WEB DESIGN</div>
+            <div class="nav-links">
+                <a href="#">Work</a>
+                <a href="#">Services</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+            </div>
+        </nav>
+
+        <div class="hero-left">
+            <p class="tagline"></p>
+            <h1 class="headline">
+                <span>WE BUILD</span>
+                <span class="accent">DIGITAL</span>
+                <span>EXPERIENCES</span>
+            </h1>
+            <p class="description">
+                Brutally honest design. Pixel-perfect execution. We craft websites that demand attention and drive results.
+            </p>
+            <div class="cta-group">
+                <button class="cta-primary">Why We're a Cut Above Square, Shopify & Wix</button>
+            </div>
+        </div>
+
+        <div class="hero-right">
+            <div class="grid-overlay"></div>
+
+            <div class="geometric-container">
+                <div class="geometric-flower">
+                    <!-- Layer 1 - Outermost -->
+                    <svg class="geo-layer layer-1" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="20" width="160" height="160" stroke="#c4785a" stroke-width="1" fill="none" transform="rotate(15 100 100)"/>
+                        <rect x="20" y="20" width="160" height="160" stroke="#c9a9a6" stroke-width="1" fill="none" transform="rotate(-15 100 100)"/>
+                    </svg>
+
+                    <!-- Layer 2 -->
+                    <svg class="geo-layer layer-2" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="30" y="30" width="140" height="140" stroke="#c9a9a6" stroke-width="1" fill="none" transform="rotate(30 100 100)"/>
+                        <rect x="30" y="30" width="140" height="140" stroke="#c9a9a6" stroke-width="1" fill="none" transform="rotate(-30 100 100)"/>
+                    </svg>
+
+                    <!-- Layer 3 -->
+                    <svg class="geo-layer layer-3" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="40" y="40" width="120" height="120" stroke="#c9a9a6" stroke-width="1" fill="none" transform="rotate(45 100 100)"/>
+                        <polygon points="100,30 170,100 100,170 30,100" stroke="#c4785a" stroke-width="1" fill="none"/>
+                    </svg>
+
+                    <!-- Layer 4 - Center -->
+                    <svg class="geo-layer layer-4" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="20" width="60" height="60" stroke="#c9a9a6" stroke-width="1" fill="none" transform="rotate(45 50 50)"/>
+                        <circle cx="50" cy="50" r="15" stroke="#c9a9a6" stroke-width="1" fill="none"/>
+                        <circle cx="50" cy="50" r="5" stroke="#c4785a" stroke-width="1.5" fill="none"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Browse Portfolio Button -->
+            <button class="browse-btn" id="browseBtn" onclick="openPortfolio()">Browse Our Portfolio</button>
+
+            <!-- Portfolio Module Overlay -->
+            <div class="portfolio-module" id="portfolioModule">
+                <div class="portfolio-header">
+                    <h2 class="portfolio-title">OUR WORK</h2>
+                    <button class="portfolio-close" onclick="closePortfolio()">×</button>
+                </div>
+                <div class="portfolio-list">
+                    <a href="https://adubuilder.io" target="_blank" class="portfolio-item">
+                        <div class="portfolio-item-header">
+                            <h3 class="portfolio-name">ADU Builder</h3>
+                            <span class="portfolio-arrow">→</span>
+                        </div>
+                        <p class="portfolio-type">Construction • Full Website</p>
+                        <p class="portfolio-desc">Massachusetts ADU construction experts. Custom website with service showcases, project galleries, and lead generation systems.</p>
+                    </a>
+
+                    <a href="https://caninekind.io" target="_blank" class="portfolio-item">
+                        <div class="portfolio-item-header">
+                            <h3 class="portfolio-name">CanineKind</h3>
+                            <span class="portfolio-arrow">→</span>
+                        </div>
+                        <p class="portfolio-type">Dog Training • Website + Client Portal</p>
+                        <p class="portfolio-desc">Professional dog training services. Complete client portal with booking system, payment integration, and automated workflows.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const portfolioModule = document.getElementById('portfolioModule');
+        const browseBtn = document.getElementById('browseBtn');
+
+        function openPortfolio() {
+            portfolioModule.classList.add('active');
+            browseBtn.classList.add('hidden');
+        }
+
+        function closePortfolio() {
+            portfolioModule.classList.remove('active');
+            browseBtn.classList.remove('hidden');
+        }
+
+        // Close on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePortfolio();
+            }
+        });
+    </script>
+</body>
+</html>
