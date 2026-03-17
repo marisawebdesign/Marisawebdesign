@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Website Design Intake Form</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F5F0;
+    --surface: #FFFFFF;
+    --border: #E2DED5;
+    --border-focus: #2C2C2C;
+    --text: #1A1A1A;
+    --text-muted: #7A756D;
+    --accent: #C4622D;
+    --accent-light: #FFF3EC;
+    --success: #3D8B5E;
+    --premium: #6B4FA0;
+    --premium-light: #F3EFFE;
+    --radius: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: var(--text);
+    color: var(--bg);
+    padding: 2.5rem 1.5rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(196,98,45,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.04) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .header-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(196,98,45,0.15);
+    padding: 0.4em 1.2em;
+    border-radius: 100px;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    position: relative;
+  }
+  .header p {
+    font-size: 0.9rem;
+    color: rgba(247,245,240,0.6);
+    max-width: 420px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .main {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .form-section {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+    transition: box-shadow 0.2s;
+  }
+  .form-section:focus-within {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+  .section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    background: var(--accent);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+  }
+  .section-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+  }
+
+  .field { margin-bottom: 1.1rem; }
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.01em;
+  }
+  label .optional {
+    font-weight: 400;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+  .field-hint {
+    font-size: 0.73rem;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+    font-style: italic;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="url"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(44,44,44,0.06);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A756D' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    padding-right: 2.5rem;
+  }
+
+  /* Color pickers */
+  .color-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  .color-picker-wrapper { position: relative; flex-shrink: 0; }
+  input[type="color"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 52px;
+    height: 52px;
+    border: 2.5px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    padding: 3px;
+    background: var(--surface);
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+  input[type="color"]::-webkit-color-swatch { border: none; border-radius: 8px; }
+  input[type="color"]::-moz-color-swatch { border: none; border-radius: 8px; }
+  input[type="color"]:hover,
+  input[type="color"]:focus { border-color: var(--accent); transform: scale(1.05); }
+  .color-info { flex: 1; }
+  .color-label { font-size: 0.8rem; font-weight: 600; }
+  .color-hex { font-size: 0.75rem; color: var(--text-muted); font-family: monospace; }
+  .color-use { font-size: 0.7rem; color: var(--text-muted); font-style: italic; }
+
+  /* Checkboxes */
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .checkbox-grid.single-col {
+    grid-template-columns: 1fr;
+  }
+  .checkbox-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.55rem 0.7rem;
+    background: var(--bg);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border: 1.5px solid transparent;
+  }
+  .checkbox-item:has(input:checked) {
+    background: var(--accent-light);
+    border-color: var(--accent);
+  }
+  .checkbox-item input[type="checkbox"] {
+    width: 18px; height: 18px;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .checkbox-item span { font-size: 0.8rem; font-weight: 500; line-height: 1.3; }
+
+  /* Premium checkbox variant */
+  .checkbox-item.premium-item {
+    background: var(--premium-light);
+    border-color: rgba(107,79,160,0.15);
+  }
+  .checkbox-item.premium-item:has(input:checked) {
+    background: rgba(107,79,160,0.15);
+    border-color: var(--premium);
+  }
+  .checkbox-item.premium-item input[type="checkbox"] {
+    accent-color: var(--premium);
+  }
+  .premium-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .premium-price {
+    font-size: 0.7rem;
+    color: var(--premium);
+    font-weight: 600;
+  }
+  .premium-desc {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-top: 2px;
+  }
+
+  .premium-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--premium);
+    background: var(--premium-light);
+    padding: 0.25em 0.7em;
+    border-radius: 100px;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Radio cards */
+  .radio-stack { display: flex; flex-direction: column; gap: 0.5rem; }
+  .radio-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.7rem 0.85rem;
+    background: var(--bg);
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .radio-card:has(input:checked) {
+    background: var(--accent-light);
+    border-color: var(--accent);
+  }
+  .radio-card input[type="radio"] { margin-top: 2px; accent-color: var(--accent); flex-shrink: 0; }
+  .radio-card-text strong { display: block; font-size: 0.82rem; font-weight: 600; }
+  .radio-card-text span { font-size: 0.73rem; color: var(--text-muted); }
+
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 1.2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    background: rgba(247,245,240,0.5);
+    line-height: 1.5;
+  }
+  .upload-zone strong { color: var(--text); display: block; margin-bottom: 0.25rem; }
+
+  .submit-area { margin-top: 1.5rem; text-align: center; }
+  .btn-generate {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.9rem 2rem;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-generate:hover { background: #A8511F; }
+  .btn-generate:active { transform: scale(0.97); }
+  .btn-generate svg { width: 18px; height: 18px; }
+  .submit-hint {
+    font-size: 0.73rem;
+    color: var(--text-muted);
+    margin-top: 0.75rem;
+    line-height: 1.5;
+  }
+
+  /* Summary overlay */
+  .summary-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: var(--bg);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .summary-overlay.active { display: block; }
+  .summary-content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+  .summary-header {
+    text-align: center;
+    padding: 2rem 1rem;
+    margin-bottom: 1rem;
+  }
+  .summary-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 0.35rem;
+  }
+  .summary-header p { font-size: 0.82rem; color: var(--text-muted); }
+
+  .summary-block {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--border);
+    page-break-inside: avoid;
+  }
+  .summary-block h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.4rem 0;
+    gap: 1rem;
+  }
+  .summary-row + .summary-row { border-top: 1px solid rgba(226,222,213,0.5); }
+  .summary-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; flex-shrink: 0; min-width: 100px; }
+  .summary-value { font-size: 0.85rem; font-weight: 500; text-align: right; word-break: break-word; white-space: pre-line; }
+  .summary-value.empty { color: var(--text-muted); font-style: italic; }
+
+  .color-swatch-row { display: flex; align-items: center; gap: 0.5rem; justify-content: flex-end; }
+  .color-swatch { width: 28px; height: 28px; border-radius: 6px; border: 2px solid var(--border); flex-shrink: 0; }
+
+  .summary-actions { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1.5rem; }
+  .btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-action svg { width: 18px; height: 18px; }
+  .btn-copy { background: var(--accent); color: white; }
+  .btn-copy:hover { background: #A8511F; }
+  .btn-email { background: var(--success); color: white; }
+  .btn-email:hover { background: #2D7048; }
+  .btn-print { background: var(--surface); color: var(--text); border: 1.5px solid var(--border); }
+  .btn-print:hover { background: var(--bg); }
+  .btn-back { background: transparent; color: var(--text-muted); font-weight: 500; font-size: 0.85rem; margin-top: 0.5rem; }
+  .btn-back:hover { color: var(--text); }
+
+  .copy-toast {
+    display: none;
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text);
+    color: var(--bg);
+    padding: 0.7rem 1.5rem;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    z-index: 2000;
+    animation: toastIn 0.3s ease;
+  }
+  .copy-toast.show { display: block; }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  @media print {
+    body { background: white; }
+    .summary-actions { display: none !important; }
+    .summary-block { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+    .summary-overlay { position: static; overflow: visible; }
+  }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  @media (max-width: 380px) {
+    .field-row { grid-template-columns: 1fr; }
+    .checkbox-grid { grid-template-columns: 1fr; }
+  }
+
+  .divider-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin: 1.25rem 0 0.6rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">New Project</div>
+  <h1>Website Design Brief</h1>
+  <p>Tell me about your vision so I can bring it to life.</p>
+</div>
+
+<div class="main">
+  <form id="intakeForm">
+
+    <!-- ══ 1. ABOUT YOUR BUSINESS ══ -->
+    <div class="form-section">
+      <div class="section-number">1</div>
+      <div class="section-title">About Your Business</div>
+      <p class="section-desc">Help me understand who you are, what you do, and who you serve.</p>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="fullName">Your Name</label>
+          <input type="text" id="fullName" name="fullName" placeholder="Jane Smith" required>
+        </div>
+        <div class="field">
+          <label for="businessName">Business Name</label>
+          <input type="text" id="businessName" name="businessName" placeholder="Smith & Co.">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="email">Business Email</label>
+          <input type="email" id="email" name="email" placeholder="you@yourbusiness.com" required>
+        </div>
+        <div class="field">
+          <label for="phone">Business Phone</label>
+          <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Interested in any of these services? <span class="optional">(optional)</span></label>
+        <div class="checkbox-grid">
+          <label class="checkbox-item"><input type="checkbox" name="extraServices" value="New branded business email"> <span>New branded business email</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="extraServices" value="Email forwarding service"> <span>Email forwarding service</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="extraServices" value="AI call answering agent"> <span>AI call answering agent</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="industry">Industry / Niche</label>
+        <input type="text" id="industry" name="industry" placeholder="e.g. Dog Breeding, HVAC, Photography">
+      </div>
+      <div class="field">
+        <label for="website">Current Website <span class="optional">(if any)</span></label>
+        <input type="url" id="website" name="website" placeholder="https://yoursite.com">
+      </div>
+      <div class="field">
+        <label for="bizDescription">What does your business do?</label>
+        <textarea id="bizDescription" name="bizDescription" placeholder="Describe your business in a few sentences — what services or products you offer, what makes you unique..." rows="3"></textarea>
+      </div>
+      <div class="field">
+        <label for="targetAudience">Who is your ideal customer?</label>
+        <textarea id="targetAudience" name="targetAudience" placeholder="Describe your target audience — age range, interests, location, what they're looking for..." rows="3"></textarea>
+      </div>
+
+      <div class="field">
+        <label>3 problems you're hoping a professional website will solve</label>
+        <p class="field-hint">Think about what's holding your business back right now online.</p>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;">
+          <div style="display:flex;align-items:center;gap:0.5rem;">
+            <span style="font-size:0.75rem;font-weight:700;color:var(--accent);flex-shrink:0;">1.</span>
+            <input type="text" id="problem1" name="problem1" placeholder="e.g. I'm invisible on Google — no one can find me">
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;">
+            <span style="font-size:0.75rem;font-weight:700;color:var(--accent);flex-shrink:0;">2.</span>
+            <input type="text" id="problem2" name="problem2" placeholder="e.g. My current site looks outdated and hurts credibility">
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;">
+            <span style="font-size:0.75rem;font-weight:700;color:var(--accent);flex-shrink:0;">3.</span>
+            <input type="text" id="problem3" name="problem3" placeholder="e.g. I lose customers because they can't book online">
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="competitiveEdge">What is your biggest competitive edge?</label>
+        <p class="field-hint">What makes you better or different from everyone else in your space?</p>
+        <textarea id="competitiveEdge" name="competitiveEdge" placeholder="e.g. 20 years of experience, fastest response time in the area, family-owned and operated, unique methodology..." rows="3"></textarea>
+      </div>
+    </div>
+
+    <!-- ══ 2. COMPETITION ANALYSIS ══ -->
+    <div class="form-section">
+      <div class="section-number">2</div>
+      <div class="section-title">Competition Analysis</div>
+      <p class="section-desc">Understanding your competitive landscape helps me design a site that stands out. Share what you can — everything here is confidential.</p>
+
+      <div class="field">
+        <label for="topSites">Websites in your industry that you think look great</label>
+        <p class="field-hint">These don't have to be competitors — just sites in your space that impress you.</p>
+        <textarea id="topSites" name="topSites" placeholder="https://example.com&#10;https://another.com&#10;https://third.com" rows="3"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="rivalUrls">Your direct competitors' websites <span class="optional">(if you're comfortable sharing)</span></label>
+        <p class="field-hint">List their website URLs — I'll review them for strengths and weaknesses to make sure your site beats them.</p>
+        <textarea id="rivalUrls" name="rivalUrls" placeholder="https://competitor1.com&#10;https://competitor2.com&#10;https://competitor3.com" rows="3"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="rivalNotes">What do you like and dislike about their sites?</label>
+        <textarea id="rivalNotes" name="rivalNotes" placeholder="e.g. Competitor 1 has great photography but their site is slow. Competitor 2 has a clean layout but no personality. Competitor 3 ranks higher than me but their site looks cheap..." rows="4"></textarea>
+      </div>
+    </div>
+
+    <!-- ══ 3. PAGES & FEATURES ══ -->
+    <div class="form-section">
+      <div class="section-number">3</div>
+      <div class="section-title">Pages &amp; Features</div>
+      <p class="section-desc">Select the pages you need, plus any premium add-ons that interest you. Premium features can be added at any time — even after launch.</p>
+
+      <div class="field">
+        <label>Standard pages</label>
+        <div class="checkbox-grid">
+          <label class="checkbox-item"><input type="checkbox" name="pages" value="Home"> <span>Home</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="pages" value="About"> <span>About</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="pages" value="Services"> <span>Services</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="pages" value="Portfolio / Gallery"> <span>Portfolio / Gallery</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="pages" value="Contact"> <span>Contact</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="pages" value="Blog"> <span>Blog</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="pages" value="Pricing"> <span>Pricing</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="pages" value="Testimonials"> <span>Testimonials</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="pages" value="FAQ"> <span>FAQ</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="pages" value="Shop / Store"> <span>Shop / Store</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="pages" value="Online Booking"> <span>Online Booking</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="pages" value="Checkout / Payments"> <span>Checkout / Payments</span></label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:1rem;">
+        <label for="otherPages">Other pages not listed <span class="optional">(optional)</span></label>
+        <textarea id="otherPages" name="otherPages" placeholder="e.g. Litter announcements, service area map, team page..." rows="2"></textarea>
+      </div>
+
+      <div class="divider-label"><span class="premium-badge">Premium Add-Ons</span></div>
+      <p class="field-hint" style="margin-bottom:0.6rem;">Check any that interest you — these can be added at any time, even after your initial build.</p>
+
+      <div class="checkbox-grid single-col">
+        <label class="checkbox-item premium-item">
+          <input type="checkbox" name="premium" value="Additional Pages — $50/page">
+          <div><div class="premium-label">Additional Pages</div><div class="premium-price">$50/page</div><div class="premium-desc">Extra service pages, team profiles, resource libraries, or any custom content beyond your package.</div></div>
+        </label>
+        <label class="checkbox-item premium-item">
+          <input type="checkbox" name="premium" value="Real-Time Order Tracking — $200">
+          <div><div class="premium-label">Real-Time Order Tracking</div><div class="premium-price">$200</div><div class="premium-desc">Customers track orders/appointments via unique codes. You update a Google Sheet, status displays instantly. Perfect for delivery services &amp; contractors.</div></div>
+        </label>
+        <label class="checkbox-item premium-item">
+          <input type="checkbox" name="premium" value="Client Portal / Dashboard — $200–400">
+          <div><div class="premium-label">Client Portal / Dashboard</div><div class="premium-price">$200–$400</div><div class="premium-desc">Password-protected customer login with service history, invoices, and project status. Syncs with Google Sheets. $200 for essentials, $400 for advanced workflows.</div></div>
+        </label>
+        <label class="checkbox-item premium-item">
+          <input type="checkbox" name="premium" value="Advanced Quote Calculator — $100">
+          <div><div class="premium-label">Advanced Quote Calculator</div><div class="premium-price">$100</div><div class="premium-desc">Handles complex pricing: volume discounts, rush upcharges, package deals, area rates. Photo uploads, sliders, and emailed quotes. Captures leads 24/7.</div></div>
+        </label>
+        <label class="checkbox-item premium-item">
+          <input type="checkbox" name="premium" value="Hardcoded ChatBot / Website Assistant — $75">
+          <div><div class="premium-label">ChatBot / Website Assistant</div><div class="premium-price">$75</div><div class="premium-desc">Guides visitors to key info, booking pages, or answers common questions without overwhelming your site.</div></div>
+        </label>
+        <label class="checkbox-item premium-item">
+          <input type="checkbox" name="premium" value="Downloadable Resources Library — $150">
+          <div><div class="premium-label">Downloadable Resources Library</div><div class="premium-price">$150</div><div class="premium-desc">Professional resource section for PDFs, guides, checklists. Auto-syncs from Google Drive. 1 custom PDF template included.</div></div>
+        </label>
+        <label class="checkbox-item premium-item">
+          <input type="checkbox" name="premium" value="Team / Staff Scheduling Page — $125">
+          <div><div class="premium-label">Team / Staff Scheduling Page</div><div class="premium-price">$125</div><div class="premium-desc">Public calendar showing team member availability with bios and specialties. Customers book with specific staff.</div></div>
+        </label>
+        <label class="checkbox-item premium-item">
+          <input type="checkbox" name="premium" value="Automated Email System — $200">
+          <div><div class="premium-label">Automated Email System</div><div class="premium-price">$200 setup</div><div class="premium-desc">Order confirmations, delivery notifications, review requests. Managed via Google Sheets + SendGrid (3,000 emails/mo free).</div></div>
+        </label>
+        <label class="checkbox-item premium-item">
+          <input type="checkbox" name="premium" value="Custom Text Notifications — $150">
+          <div><div class="premium-label">Custom Text Notifications</div><div class="premium-price">$150</div><div class="premium-desc">Send automated SMS to customers for appointment reminders, order updates, or follow-ups. Managed through a simple dashboard.</div></div>
+        </label>
+        <label class="checkbox-item premium-item">
+          <input type="checkbox" name="premium" value="Local SEO Optimization Package — $200">
+          <div><div class="premium-label">Local SEO Optimization Package</div><div class="premium-price">$200</div><div class="premium-desc">Citation building on 15+ directories, competitor keyword research, Google Business optimization, and local backlink setup. Rank higher for "near me" searches.</div></div>
+        </label>
+      </div>
+    </div>
+
+    <!-- ══ 4. BRAND COLORS & HERO ══ -->
+    <div class="form-section">
+      <div class="section-number">4</div>
+      <div class="section-title">Brand Colors &amp; Hero Section</div>
+      <p class="section-desc">Your brand palette and the first thing visitors see — let's make both count.</p>
+
+      <div class="color-row">
+        <div class="color-picker-wrapper"><input type="color" id="colorPrimary" name="colorPrimary" value="#2C3E50"></div>
+        <div class="color-info"><div class="color-label">Primary Color</div><div class="color-hex" data-for="colorPrimary">#2C3E50</div><div class="color-use">Headers, buttons, main brand color</div></div>
+      </div>
+      <div class="color-row">
+        <div class="color-picker-wrapper"><input type="color" id="colorSecondary" name="colorSecondary" value="#E67E22"></div>
+        <div class="color-info"><div class="color-label">Secondary Color</div><div class="color-hex" data-for="colorSecondary">#E67E22</div><div class="color-use">Accents, highlights, call-to-action</div></div>
+      </div>
+      <div class="color-row">
+        <div class="color-picker-wrapper"><input type="color" id="colorAccent" name="colorAccent" value="#1ABC9C"></div>
+        <div class="color-info"><div class="color-label">Accent Color</div><div class="color-hex" data-for="colorAccent">#1ABC9C</div><div class="color-use">Icons, links, subtle highlights</div></div>
+      </div>
+      <div class="color-row">
+        <div class="color-picker-wrapper"><input type="color" id="colorBackground" name="colorBackground" value="#FAFAFA"></div>
+        <div class="color-info"><div class="color-label">Background Color</div><div class="color-hex" data-for="colorBackground">#FAFAFA</div><div class="color-use">Page background tone</div></div>
+      </div>
+      <div class="color-row">
+        <div class="color-picker-wrapper"><input type="color" id="colorText" name="colorText" value="#333333"></div>
+        <div class="color-info"><div class="color-label">Text Color</div><div class="color-hex" data-for="colorText">#333333</div><div class="color-use">Body text, paragraphs</div></div>
+      </div>
+
+      <div class="field" style="margin-top: 1rem;">
+        <label>Is it okay to adjust your colors slightly for better readability or contrast?</label>
+        <div class="radio-stack">
+          <label class="radio-card">
+            <input type="radio" name="colorFlexibility" value="Yes, slight adjustments are fine">
+            <div class="radio-card-text"><strong>Yes, slight adjustments are fine</strong><span>Tweak shades for better web readability</span></div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="colorFlexibility" value="No, I need exact color matches">
+            <div class="radio-card-text"><strong>No, I need exact color matches</strong><span>These are strict brand guidelines</span></div>
+          </label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top: 1rem;">
+        <label for="colorNotes">Color notes <span class="optional">(optional)</span></label>
+        <textarea id="colorNotes" name="colorNotes" placeholder="Any notes about your color preferences — gradients, dark mode, existing brand guidelines..." rows="2"></textarea>
+      </div>
+
+      <div class="divider-label">Hero Section</div>
+      <p class="field-hint" style="margin-bottom:0.75rem;">The hero is the large banner area at the very top of your homepage — the first thing visitors see. It sets the tone for your entire site.</p>
+
+      <div class="field">
+        <label>What style hero section appeals to you?</label>
+        <div class="radio-stack">
+          <label class="radio-card">
+            <input type="radio" name="heroStyle" value="Static with bold graphics">
+            <div class="radio-card-text"><strong>Static with Bold Graphics</strong><span>Clean, impactful design with strong imagery and typography — no motion</span></div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="heroStyle" value="Subtle animation / motion">
+            <div class="radio-card-text"><strong>Subtle Animation / Motion</strong><span>Gentle movement — floating elements, fade-ins, parallax scrolling</span></div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="heroStyle" value="Full video background">
+            <div class="radio-card-text"><strong>Full Video Background</strong><span>Looping video clip behind your headline — high impact, cinematic feel</span></div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="heroStyle" value="Image slideshow / carousel">
+            <div class="radio-card-text"><strong>Image Slideshow / Carousel</strong><span>Rotating images showcasing different services, projects, or products</span></div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="heroStyle" value="Not sure — surprise me">
+            <div class="radio-card-text"><strong>Not Sure — Surprise Me</strong><span>I trust your judgment based on my brand</span></div>
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="heroContent">What should the hero headline or message communicate?</label>
+        <p class="field-hint">Think about what you'd say to a new customer in one sentence.</p>
+        <textarea id="heroContent" name="heroContent" placeholder="e.g. 'Trusted HVAC service for the South Shore since 2005' or 'Award-winning custom homes built for how you live'" rows="2"></textarea>
+      </div>
+
+      <div class="field">
+        <label>What should the main call-to-action button say?</label>
+        <p class="field-hint">This is the button visitors click first — where should it send them?</p>
+        <div class="radio-stack">
+          <label class="radio-card">
+            <input type="radio" name="heroCTA" value="Get a Free Quote">
+            <div class="radio-card-text"><strong>Get a Free Quote</strong></div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="heroCTA" value="Book Now">
+            <div class="radio-card-text"><strong>Book Now</strong></div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="heroCTA" value="View Our Work">
+            <div class="radio-card-text"><strong>View Our Work</strong></div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="heroCTA" value="Learn More">
+            <div class="radio-card-text"><strong>Learn More</strong></div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="heroCTA" value="Call Us Today">
+            <div class="radio-card-text"><strong>Call Us Today</strong></div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="heroCTA" value="Shop Now">
+            <div class="radio-card-text"><strong>Shop Now</strong></div>
+          </label>
+        </div>
+      </div>
+      <div class="field">
+        <label for="ctaCustom">Or write your own CTA <span class="optional">(optional)</span></label>
+        <input type="text" id="ctaCustom" name="ctaCustom" placeholder="e.g. Schedule Your Free Inspection">
+      </div>
+    </div>
+
+    <!-- ══ 5. STYLE & VIBE ══ -->
+    <div class="form-section">
+      <div class="section-number">5</div>
+      <div class="section-title">Style &amp; Vibe</div>
+      <p class="section-desc">Help me understand the aesthetic you're going for.</p>
+      <div class="field">
+        <label>Which styles resonate with you? <span class="optional">(select all)</span></label>
+        <div class="checkbox-grid">
+          <label class="checkbox-item"><input type="checkbox" name="style" value="Clean & Minimal"> <span>Clean & Minimal</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="style" value="Bold & Modern"> <span>Bold & Modern</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="style" value="Warm & Friendly"> <span>Warm & Friendly</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="style" value="Luxury / High-End"> <span>Luxury / High-End</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="style" value="Playful & Fun"> <span>Playful & Fun</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="style" value="Dark & Dramatic"> <span>Dark & Dramatic</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="style" value="Rustic / Organic"> <span>Rustic / Organic</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="style" value="Corporate / Professional"> <span>Corporate / Professional</span></label>
+        </div>
+      </div>
+      <div class="field" style="margin-top:1rem;">
+        <label for="avoidNotes">Anything to avoid?</label>
+        <textarea id="avoidNotes" name="avoidNotes" placeholder="e.g. No neon colors, no cluttered layouts, no stock photos..." rows="2"></textarea>
+      </div>
+    </div>
+
+    <!-- ══ 6. CONTENT & MEDIA ══ -->
+    <div class="form-section">
+      <div class="section-number">6</div>
+      <div class="section-title">Content &amp; Media</div>
+      <p class="section-desc">What content will you provide for the site?</p>
+      <div class="field">
+        <label>Do you have the following ready?</label>
+        <div class="checkbox-grid">
+          <label class="checkbox-item"><input type="checkbox" name="content" value="Logo"> <span>Logo</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="content" value="Professional photos"> <span>Pro photos</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="content" value="Testimonials / reviews"> <span>Testimonials</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="content" value="Social media links"> <span>Social links</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="content" value="FAQs"> <span>FAQs</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="content" value="Custom info or text"> <span>Custom info or text</span></label>
+        </div>
+      </div>
+      <div class="field" style="margin-top: 1rem;">
+        <label for="contentNotes">Content notes <span class="optional">(optional)</span></label>
+        <textarea id="contentNotes" name="contentNotes" placeholder="Anything else about content — need copywriting help, have videos, will send files separately..." rows="2"></textarea>
+      </div>
+    </div>
+
+    <!-- ══ 7. ANYTHING ELSE ══ -->
+    <div class="form-section">
+      <div class="section-number">7</div>
+      <div class="section-title">Anything Else?</div>
+      <p class="section-desc">Last chance to share anything I should know.</p>
+      <div class="field">
+        <label for="additionalNotes">Additional notes, ideas, or requests</label>
+        <textarea id="additionalNotes" name="additionalNotes" placeholder="Must-have features, special requirements, accessibility needs, branding history, anything at all..." rows="4"></textarea>
+      </div>
+      <div class="upload-zone">
+        <strong>Have files to share?</strong>
+        Please email your logo, photos, brand guide, or inspiration images along with your completed form.
+      </div>
+    </div>
+
+    <!-- ── SUBMIT ── -->
+    <div class="submit-area">
+      <button type="button" class="btn-generate" onclick="generateSummary()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+        Generate My Brief
+      </button>
+      <p class="submit-hint">This will create a shareable summary you can copy &amp; paste, email directly, or print/save as PDF.</p>
+    </div>
+
+  </form>
+</div>
+
+<!-- ═══════════════ SUMMARY VIEW ═══════════════ -->
+<div class="summary-overlay" id="summaryOverlay">
+  <div class="summary-header">
+    <h2>Your Website Brief</h2>
+    <p id="summaryDate"></p>
+  </div>
+  <div class="summary-content" id="summaryContent"></div>
+</div>
+
+<div class="copy-toast" id="copyToast">Copied to clipboard!</div>
+
+<script>
+  // Live hex display
+  document.querySelectorAll('input[type="color"]').forEach(picker => {
+    picker.addEventListener('input', e => {
+      const hex = e.target.value.toUpperCase();
+      const label = document.querySelector(`.color-hex[data-for="${e.target.id}"]`);
+      if (label) label.textContent = hex;
+    });
+  });
+
+  function getVal(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+  function getChecked(name) { return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value); }
+  function getRadio(name) { const c = document.querySelector(`input[name="${name}"]:checked`); return c ? c.value : ''; }
+
+  function generateSummary() {
+    const d = {
+      fullName: getVal('fullName'), businessName: getVal('businessName'),
+      email: getVal('email'), phone: getVal('phone'),
+      extraServices: getChecked('extraServices'),
+      industry: getVal('industry'), website: getVal('website'),
+      bizDescription: getVal('bizDescription'), targetAudience: getVal('targetAudience'),
+      problem1: getVal('problem1'), problem2: getVal('problem2'), problem3: getVal('problem3'),
+      competitiveEdge: getVal('competitiveEdge'),
+      topSites: getVal('topSites'), rivalUrls: getVal('rivalUrls'), rivalNotes: getVal('rivalNotes'),
+      pages: getChecked('pages'), otherPages: getVal('otherPages'),
+      premium: getChecked('premium'),
+      colorPrimary: getVal('colorPrimary').toUpperCase(),
+      colorSecondary: getVal('colorSecondary').toUpperCase(),
+      colorAccent: getVal('colorAccent').toUpperCase(),
+      colorBackground: getVal('colorBackground').toUpperCase(),
+      colorText: getVal('colorText').toUpperCase(),
+      colorFlexibility: getRadio('colorFlexibility'),
+      colorNotes: getVal('colorNotes'),
+      heroStyle: getRadio('heroStyle'), heroContent: getVal('heroContent'),
+      heroCTA: getRadio('heroCTA'), ctaCustom: getVal('ctaCustom'),
+      styles: getChecked('style'), avoidNotes: getVal('avoidNotes'),
+      content: getChecked('content'), contentNotes: getVal('contentNotes'),
+      additionalNotes: getVal('additionalNotes'),
+    };
+
+    if (!d.fullName || !d.email) {
+      alert('Please fill in at least your name and business email.');
+      return;
+    }
+
+    const v = (val, fb='—') => val || `<span class="empty">${fb}</span>`;
+    const ls = (arr, fb='—') => arr.length ? arr.join(', ') : `<span class="empty">${fb}</span>`;
+    const nl = (val) => val ? val.replace(/\n/g, '<br>') : '<span class="empty">—</span>';
+    const cs = (hex, label) => `
+      <div class="summary-row">
+        <span class="summary-label">${label}</span>
+        <span class="summary-value"><div class="color-swatch-row"><span>${hex}</span><span class="color-swatch" style="background:${hex}"></span></div></span>
+      </div>`;
+
+    const problems = [d.problem1, d.problem2, d.problem3].filter(Boolean);
+    const cta = d.ctaCustom || d.heroCTA;
+
+    const now = new Date();
+    document.getElementById('summaryDate').textContent =
+      `Submitted ${now.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' })}`;
+
+    const html = `
+      <div class="summary-block"><h3>Business &amp; Contact</h3>
+        <div class="summary-row"><span class="summary-label">Name</span><span class="summary-value">${v(d.fullName)}</span></div>
+        <div class="summary-row"><span class="summary-label">Business</span><span class="summary-value">${v(d.businessName)}</span></div>
+        <div class="summary-row"><span class="summary-label">Email</span><span class="summary-value">${v(d.email)}</span></div>
+        <div class="summary-row"><span class="summary-label">Phone</span><span class="summary-value">${v(d.phone)}</span></div>
+        <div class="summary-row"><span class="summary-label">Extra Services</span><span class="summary-value">${ls(d.extraServices)}</span></div>
+        <div class="summary-row"><span class="summary-label">Industry</span><span class="summary-value">${v(d.industry)}</span></div>
+        <div class="summary-row"><span class="summary-label">Current Site</span><span class="summary-value">${v(d.website)}</span></div>
+        <div class="summary-row"><span class="summary-label">Description</span><span class="summary-value">${v(d.bizDescription)}</span></div>
+        <div class="summary-row"><span class="summary-label">Target Audience</span><span class="summary-value">${v(d.targetAudience)}</span></div>
+        <div class="summary-row"><span class="summary-label">Problems</span><span class="summary-value">${problems.length ? problems.map((p,i) => `${i+1}. ${p}`).join('<br>') : '<span class="empty">—</span>'}</span></div>
+        <div class="summary-row"><span class="summary-label">Competitive Edge</span><span class="summary-value">${v(d.competitiveEdge)}</span></div>
+      </div>
+      <div class="summary-block"><h3>Competition Analysis</h3>
+        <div class="summary-row"><span class="summary-label">Top Sites</span><span class="summary-value">${nl(d.topSites)}</span></div>
+        <div class="summary-row"><span class="summary-label">Rival URLs</span><span class="summary-value">${nl(d.rivalUrls)}</span></div>
+        <div class="summary-row"><span class="summary-label">Likes / Dislikes</span><span class="summary-value">${v(d.rivalNotes)}</span></div>
+      </div>
+      <div class="summary-block"><h3>Pages &amp; Features</h3>
+        <div class="summary-row"><span class="summary-label">Pages</span><span class="summary-value">${ls(d.pages)}</span></div>
+        <div class="summary-row"><span class="summary-label">Other Pages</span><span class="summary-value">${v(d.otherPages)}</span></div>
+        <div class="summary-row"><span class="summary-label">Premium Add-Ons</span><span class="summary-value">${d.premium.length ? d.premium.join('<br>') : '<span class="empty">None selected</span>'}</span></div>
+      </div>
+      <div class="summary-block"><h3>Brand Colors &amp; Hero</h3>
+        ${cs(d.colorPrimary, 'Primary')}${cs(d.colorSecondary, 'Secondary')}${cs(d.colorAccent, 'Accent')}${cs(d.colorBackground, 'Background')}${cs(d.colorText, 'Text')}
+        <div class="summary-row"><span class="summary-label">Color Flexibility</span><span class="summary-value">${v(d.colorFlexibility)}</span></div>
+        <div class="summary-row"><span class="summary-label">Color Notes</span><span class="summary-value">${v(d.colorNotes)}</span></div>
+        <div class="summary-row"><span class="summary-label">Hero Style</span><span class="summary-value">${v(d.heroStyle)}</span></div>
+        <div class="summary-row"><span class="summary-label">Hero Message</span><span class="summary-value">${v(d.heroContent)}</span></div>
+        <div class="summary-row"><span class="summary-label">CTA Button</span><span class="summary-value">${v(cta)}</span></div>
+      </div>
+      <div class="summary-block"><h3>Style &amp; Vibe</h3>
+        <div class="summary-row"><span class="summary-label">Styles</span><span class="summary-value">${ls(d.styles)}</span></div>
+        <div class="summary-row"><span class="summary-label">Avoid</span><span class="summary-value">${v(d.avoidNotes)}</span></div>
+      </div>
+      <div class="summary-block"><h3>Content Ready</h3>
+        <div class="summary-row"><span class="summary-label">Available</span><span class="summary-value">${ls(d.content)}</span></div>
+        <div class="summary-row"><span class="summary-label">Notes</span><span class="summary-value">${v(d.contentNotes)}</span></div>
+      </div>
+      ${d.additionalNotes ? `<div class="summary-block"><h3>Additional Notes</h3><div style="font-size:0.85rem;line-height:1.6;">${d.additionalNotes}</div></div>` : ''}
+
+      <div class="summary-actions">
+        <button class="btn-action btn-copy" onclick="copyAsText()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy as Text
+        </button>
+        <button class="btn-action btn-email" onclick="emailBrief()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Send via Email
+        </button>
+        <button class="btn-action btn-print" onclick="window.print()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print / Save as PDF
+        </button>
+        <button class="btn-action btn-back" onclick="closeSummary()">← Back to edit form</button>
+      </div>`;
+
+    document.getElementById('summaryContent').innerHTML = html;
+    document.getElementById('summaryOverlay').classList.add('active');
+    window.scrollTo(0, 0);
+    window._briefData = d;
+  }
+
+  function closeSummary() {
+    document.getElementById('summaryOverlay').classList.remove('active');
+  }
+
+  function buildPlainText() {
+    const d = window._briefData;
+    const l = (label, val) => val ? `${label}: ${val}` : '';
+    const problems = [d.problem1, d.problem2, d.problem3].filter(Boolean);
+    const cta = d.ctaCustom || d.heroCTA;
+
+    const lines = [
+      '═══════════════════════════════════',
+      '       WEBSITE DESIGN BRIEF',
+      '═══════════════════════════════════',
+      `Date: ${new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'})}`,
+      '',
+      '── BUSINESS & CONTACT ──',
+      l('Name', d.fullName), l('Business', d.businessName),
+      l('Email', d.email), l('Phone', d.phone),
+      d.extraServices.length ? `Interested In: ${d.extraServices.join(', ')}` : '',
+      l('Industry', d.industry), l('Current Site', d.website),
+      l('Description', d.bizDescription),
+      l('Target Audience', d.targetAudience),
+      problems.length ? `Problems to Solve:\n  1. ${problems[0] || ''}${problems[1] ? '\n  2. ' + problems[1] : ''}${problems[2] ? '\n  3. ' + problems[2] : ''}` : '',
+      l('Competitive Edge', d.competitiveEdge),
+      '',
+      '── COMPETITION ANALYSIS ──',
+      l('Top Sites', d.topSites),
+      l('Rival URLs', d.rivalUrls),
+      l('Likes/Dislikes', d.rivalNotes),
+      '',
+      '── PAGES & FEATURES ──',
+      l('Pages', d.pages.join(', ')),
+      l('Other Pages', d.otherPages),
+      d.premium.length ? `Premium Add-Ons:\n  ${d.premium.join('\n  ')}` : '',
+      '',
+      '── BRAND COLORS & HERO ──',
+      `Primary:    ${d.colorPrimary}`,
+      `Secondary:  ${d.colorSecondary}`,
+      `Accent:     ${d.colorAccent}`,
+      `Background: ${d.colorBackground}`,
+      `Text:       ${d.colorText}`,
+      l('Color Flexibility', d.colorFlexibility),
+      l('Color Notes', d.colorNotes),
+      l('Hero Style', d.heroStyle),
+      l('Hero Message', d.heroContent),
+      l('CTA Button', cta),
+      '',
+      '── STYLE & VIBE ──',
+      l('Styles', d.styles.join(', ')),
+      l('Avoid', d.avoidNotes),
+      '',
+      '── CONTENT READY ──',
+      l('Available', d.content.join(', ')),
+      l('Notes', d.contentNotes),
+      '',
+      d.additionalNotes ? '── ADDITIONAL NOTES ──' : '',
+      d.additionalNotes || '',
+      '═══════════════════════════════════',
+    ].filter(x => x !== false && x !== undefined);
+    return lines.join('\n').replace(/\n{3,}/g, '\n\n');
+  }
+
+  function copyAsText() {
+    const text = buildPlainText();
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('Copied to clipboard!');
+    }).catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('Copied to clipboard!');
+    });
+  }
+
+  function emailBrief() {
+    const d = window._briefData;
+    const subject = encodeURIComponent(`Website Design Brief — ${d.businessName || d.fullName}`);
+    const body = encodeURIComponent(buildPlainText());
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('copyToast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+</script>
+
+</body>
+</html>
