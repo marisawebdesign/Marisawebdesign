@@ -310,6 +310,76 @@
   }
   .upload-zone strong { color: var(--text); display: block; margin-bottom: 0.25rem; }
 
+  /* ── Save Progress Banner ── */
+  .save-banner {
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(196,98,45,0.1);
+    border: 1px solid rgba(196,98,45,0.35);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--text);
+  }
+  .save-banner.visible { display: flex; }
+  .save-banner-icon { font-size: 1.1rem; flex-shrink: 0; }
+  .save-banner-text { flex: 1; line-height: 1.4; }
+  .save-banner-text strong { color: var(--accent); }
+  .save-banner-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+  .btn-restore {
+    font-size: 0.75rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    padding: 0.35em 0.9em;
+    border-radius: 100px;
+    cursor: pointer;
+    border: none;
+    background: var(--accent);
+    color: white;
+    transition: background 0.2s;
+  }
+  .btn-restore:hover { background: #A8511F; }
+  .btn-discard {
+    font-size: 0.75rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    padding: 0.35em 0.9em;
+    border-radius: 100px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    transition: background 0.2s;
+  }
+  .btn-discard:hover { background: rgba(0,0,0,0.05); }
+  /* ── Save button ── */
+  .btn-save {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--accent);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.7rem 1.4rem;
+    border: 2px solid var(--accent);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-save:hover { background: rgba(196,98,45,0.08); }
+  .btn-save svg { width: 16px; height: 16px; }
+  .save-status {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 0.4rem;
+    min-height: 1.2em;
+    transition: opacity 0.4s;
+  }
   .submit-area { margin-top: 1.5rem; text-align: center; }
   .btn-generate {
     display: inline-flex;
@@ -477,6 +547,16 @@
 
 <div class="main">
   <form id="intakeForm">
+
+    <!-- ── Saved progress banner ── -->
+    <div class="save-banner" id="saveBanner">
+      <span class="save-banner-icon">💾</span>
+      <span class="save-banner-text"><strong>You have saved progress.</strong> Would you like to pick up where you left off?</span>
+      <span class="save-banner-actions">
+        <button type="button" class="btn-restore" onclick="restoreProgress()">Restore</button>
+        <button type="button" class="btn-discard" onclick="discardSaved()">Discard</button>
+      </span>
+    </div>
 
     <!-- ══ 1. ABOUT YOUR BUSINESS ══ -->
     <div class="form-section">
@@ -842,6 +922,13 @@
         Generate My Brief
       </button>
       <p class="submit-hint">This will create a shareable summary you can copy &amp; paste, email directly, or print/save as PDF.</p>
+      <div style="margin-top:1rem;">
+        <button type="button" class="btn-save" onclick="saveProgress()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17,21 17,13 7,13"/><polyline points="7,3 7,8 15,8"/></svg>
+          Save Progress
+        </button>
+        <p class="save-status" id="saveStatus"></p>
+      </div>
     </div>
 
   </form>
@@ -1075,6 +1162,123 @@
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2200);
   }
+
+  // ── Save / Restore progress ──────────────────────────────────────────
+  const SAVE_KEY = 'marisaDesignBrief_v1';
+
+  function collectFormData() {
+    return {
+      // text inputs
+      fullName: getVal('fullName'), businessName: getVal('businessName'),
+      email: getVal('email'), phone: getVal('phone'),
+      industry: getVal('industry'), website: getVal('website'),
+      bizDescription: getVal('bizDescription'), targetAudience: getVal('targetAudience'),
+      problem1: getVal('problem1'), problem2: getVal('problem2'), problem3: getVal('problem3'),
+      competitiveEdge: getVal('competitiveEdge'),
+      topSites: getVal('topSites'), rivalUrls: getVal('rivalUrls'), rivalNotes: getVal('rivalNotes'),
+      otherPages: getVal('otherPages'),
+      colorPrimary: getVal('colorPrimary'), colorSecondary: getVal('colorSecondary'),
+      colorAccent: getVal('colorAccent'), colorBackground: getVal('colorBackground'),
+      colorText: getVal('colorText'),
+      colorNotes: getVal('colorNotes'), heroContent: getVal('heroContent'), ctaCustom: getVal('ctaCustom'),
+      avoidNotes: getVal('avoidNotes'), contentNotes: getVal('contentNotes'),
+      additionalNotes: getVal('additionalNotes'),
+      // checkboxes & radios
+      extraServices: getChecked('extraServices'),
+      pages: getChecked('pages'),
+      premium: getChecked('premium'),
+      style: getChecked('style'),
+      content: getChecked('content'),
+      colorFlexibility: getRadio('colorFlexibility'),
+      heroStyle: getRadio('heroStyle'),
+      heroCTA: getRadio('heroCTA'),
+      _savedAt: Date.now(),
+    };
+  }
+
+  function applyFormData(d) {
+    const setVal = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; };
+    const setChecked = (name, vals) => {
+      document.querySelectorAll(`input[name="${name}"]`).forEach(cb => {
+        cb.checked = Array.isArray(vals) && vals.includes(cb.value);
+      });
+    };
+    const setRadio = (name, val) => {
+      const r = document.querySelector(`input[name="${name}"][value="${CSS.escape(val)}"]`);
+      if (r) r.checked = true;
+    };
+
+    ['fullName','businessName','email','phone','industry','website','bizDescription',
+     'targetAudience','problem1','problem2','problem3','competitiveEdge',
+     'topSites','rivalUrls','rivalNotes','otherPages',
+     'colorPrimary','colorSecondary','colorAccent','colorBackground','colorText',
+     'colorNotes','heroContent','ctaCustom','avoidNotes','contentNotes','additionalNotes'
+    ].forEach(id => setVal(id, d[id]));
+
+    ['extraServices','pages','premium','style','content'].forEach(name => setChecked(name, d[name]));
+    ['colorFlexibility','heroStyle','heroCTA'].forEach(name => setRadio(name, d[name]));
+
+    // Refresh color hex labels
+    document.querySelectorAll('input[type="color"]').forEach(picker => {
+      const label = document.querySelector(`.color-hex[data-for="${picker.id}"]`);
+      if (label) label.textContent = picker.value.toUpperCase();
+    });
+  }
+
+  function saveProgress() {
+    try {
+      const data = collectFormData();
+      localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+      const status = document.getElementById('saveStatus');
+      status.textContent = 'Progress saved — you can close this tab and come back anytime.';
+      setTimeout(() => { status.textContent = ''; }, 4000);
+    } catch(e) {
+      alert('Could not save progress. Your browser may have storage disabled.');
+    }
+  }
+
+  function restoreProgress() {
+    try {
+      const raw = localStorage.getItem(SAVE_KEY);
+      if (!raw) return;
+      applyFormData(JSON.parse(raw));
+      document.getElementById('saveBanner').classList.remove('visible');
+      showToast('Progress restored!');
+    } catch(e) {}
+  }
+
+  function discardSaved() {
+    localStorage.removeItem(SAVE_KEY);
+    document.getElementById('saveBanner').classList.remove('visible');
+  }
+
+  // Auto-save on any input change (debounced 1.5s)
+  let _autoSaveTimer;
+  document.getElementById('intakeForm').addEventListener('input', () => {
+    clearTimeout(_autoSaveTimer);
+    _autoSaveTimer = setTimeout(() => {
+      try { localStorage.setItem(SAVE_KEY, JSON.stringify(collectFormData())); } catch(e) {}
+    }, 1500);
+  });
+  document.getElementById('intakeForm').addEventListener('change', () => {
+    clearTimeout(_autoSaveTimer);
+    _autoSaveTimer = setTimeout(() => {
+      try { localStorage.setItem(SAVE_KEY, JSON.stringify(collectFormData())); } catch(e) {}
+    }, 1500);
+  });
+
+  // On page load, show banner if saved data exists
+  (function checkSaved() {
+    try {
+      const raw = localStorage.getItem(SAVE_KEY);
+      if (!raw) return;
+      const d = JSON.parse(raw);
+      // Only show banner if there's at least some meaningful data
+      if (d.fullName || d.businessName || d.email) {
+        document.getElementById('saveBanner').classList.add('visible');
+      }
+    } catch(e) {}
+  })();
 </script>
 
 </body>
