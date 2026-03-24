@@ -1,0 +1,145 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+#mw{width:100%;padding:0.5rem 0}
+#map{width:100%;height:65vh;min-height:350px;max-height:800px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);overflow:hidden;touch-action:manipulation}
+.leg{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:10px;padding:0 2px}
+.li{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary);white-space:nowrap}
+.dot{width:10px;height:10px;border-radius:50%;border:1.5px solid #fff;display:inline-block;flex-shrink:0}
+.sq{border-radius:2px;background:rgba(168,85,247,0.25);border:1.5px solid #A855F7}
+.bw{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px;padding:0 2px}
+.bw button{font-size:12px;padding:5px 10px;border-radius:6px;cursor:pointer;white-space:nowrap;min-height:34px;touch-action:manipulation}
+@media(max-width:480px){
+  #map{height:55vh;min-height:300px;border-radius:6px}
+  .leg{gap:4px 8px}
+  .li{font-size:11px}
+  .dot{width:8px;height:8px}
+  .bw button{font-size:11px;padding:4px 8px;flex:1 1 auto;min-width:0;min-height:38px}
+}
+</style>
+<div id="mw">
+<div id="map"></div>
+<div class="leg">
+<div class="li"><span class="dot" style="background:#DC2626;box-shadow:0 0 0 1px #DC2626"></span>HQ</div>
+<div class="li"><span class="dot" style="background:#3B82F6;box-shadow:0 0 0 1px #3B82F6"></span>Unpartnered</div>
+<div class="li"><span class="dot" style="background:#10B981;box-shadow:0 0 0 1px #10B981"></span>Partner</div>
+<div class="li"><span class="dot" style="background:#F59E0B;box-shadow:0 0 0 1px #F59E0B"></span>Farm</div>
+<div class="li"><span class="dot" style="background:#EC4899;box-shadow:0 0 0 1px #EC4899"></span>Restaurant</div>
+<div class="li"><span class="dot sq" style="background:rgba(168,85,247,0.25)"></span>Neighborhood</div>
+</div>
+<div class="bw">
+<button onclick="tog('unpartnered')" id="b-unpartnered">Unpartnered</button>
+<button onclick="tog('partner')" id="b-partner">Partners</button>
+<button onclick="tog('farms')" id="b-farms">Farms</button>
+<button onclick="tog('restaurants')" id="b-restaurants">Restaurants</button>
+<button onclick="tog('neighborhoods')" id="b-neighborhoods">Areas</button>
+<button onclick="all()">All</button>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script>
+var isMob=window.innerWidth<600;
+var M=L.map('map',{scrollWheelZoom:true,tap:true,dragging:true,touchZoom:true,zoomControl:!isMob}).setView([45.66,-67.88],isMob?8:9);
+if(isMob){L.control.zoom({position:'bottomright'}).addTo(M)}
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{attribution:'Esri',maxZoom:18}).addTo(M);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,opacity:0.7}).addTo(M);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,opacity:0.9}).addTo(M);
+
+var D=[45.6612,-67.8534];
+L.circle(D,{radius:80467,color:'#fff',fillColor:'#3B82F6',fillOpacity:0.07,weight:isMob?1.5:2,dashArray:'10,6'}).addTo(M);
+
+var ps=isMob?0.75:1;
+function ic(c,s){var sz=Math.round(s*ps);return L.divIcon({className:'',html:'<div style="width:'+sz+'px;height:'+sz+'px;border-radius:50%;background:'+c+';border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,0.5);"></div>',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2],popupAnchor:[0,-sz/2]})}
+
+var ly={unpartnered:true,partner:true,farms:true,restaurants:true,neighborhoods:true};
+var gr={unpartnered:[],partner:[],farms:[],restaurants:[],neighborhoods:[]};
+
+function ap(a,b,c,s,l,d,k){
+  var m=L.marker([a,b],{icon:ic(c,s)});
+  m.bindPopup('<div style="font-family:system-ui,-apple-system,sans-serif;min-width:160px;max-width:260px;"><div style="font-weight:600;font-size:13px;margin-bottom:2px;">'+l+'</div><div style="font-size:11px;color:#555;line-height:1.35;">'+d+'</div></div>',{maxWidth:260,autoPanPadding:[20,20]});
+  m.addTo(M);gr[k].push(m);
+}
+
+var hi=L.divIcon({className:'',html:'<div style="width:18px;height:18px;border-radius:50%;background:#DC2626;border:3px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,0.6);"></div>',iconSize:[18,18],iconAnchor:[9,9],popupAnchor:[0,-9]});
+L.marker(D,{icon:hi}).addTo(M).bindPopup('<div style="font-family:system-ui;"><div style="font-weight:600;font-size:13px;">Danforth, ME 04424</div><div style="font-size:11px;color:#555;">MainCourier HQ. Pop ~590.</div></div>',{maxWidth:220});
+
+ap(46.1319,-67.8344,'#3B82F6',16,'Walmart Supercenter','Houlton, 35 mi. Grocery, pharmacy, household. Primary batch route.','unpartnered');
+ap(46.1254,-67.8428,'#3B82F6',16,'Hannaford Supermarket','Houlton, 35 mi. 33 Ludlow Rd. Full grocery + pharmacy.','unpartnered');
+ap(45.1889,-67.2766,'#3B82F6',16,'Walmart Supercenter','Calais, 45 mi. Grocery, pharmacy, general.','unpartnered');
+ap(45.3622,-68.5061,'#3B82F6',16,'Hannaford Supermarket','Lincoln, 50 mi. 84 W Broadway. Full grocery.','unpartnered');
+
+ap(45.1834,-67.2765,'#10B981',14,'Calais IGA','9 Washington St. Locally owned. Top partner candidate.','partner');
+ap(45.1880,-67.2850,'#10B981',14,'Tradewinds Shop n Save','Calais. Hannaford-supplied independent.','partner');
+ap(45.2264,-67.5736,'#10B981',14,'Princeton Food Mart IGA','123 Main St, Princeton. 20 mi. Independent + Ace Hardware.','partner');
+ap(45.4378,-67.7618,'#10B981',14,'Topsfield Country Store','Topsfield, 15 mi. General store. Pickup hub candidate.','partner');
+ap(45.5967,-67.8120,'#10B981',14,'Waite General Store','Waite, 8 mi. Since 1911. Pickup hub candidate.','partner');
+ap(46.1400,-67.8500,'#10B981',14,'Andy\'s IGA Foodliner','Houlton. Local IGA.','partner');
+ap(46.0700,-67.8100,'#10B981',14,'Pioneer Place','Smyrna. Amish general store. Unique local products.','partner');
+ap(45.6550,-67.8700,'#10B981',12,'Danforth Food Pantry','Community food resource. Rescue bag partner.','partner');
+ap(45.3700,-68.5200,'#10B981',14,'High Street Market','119 High St, Lincoln. Independent grocery.','partner');
+ap(45.0600,-67.1100,'#10B981',12,'Riverside Grocery','Pembroke. Small local grocery. Eastern edge.','partner');
+
+ap(45.7100,-67.9200,'#F59E0B',13,'Potato farms','Danforth/Bancroft. Aroostook potato country.','farms');
+ap(46.0500,-67.9000,'#F59E0B',13,'Amish farm community','Smyrna/Oakfield. Produce, baked goods, maple syrup.','farms');
+ap(45.8000,-68.0000,'#F59E0B',12,'Haynesville homesteads','Eggs, vegetables, preserves, honey.','farms');
+ap(45.5500,-67.6000,'#F59E0B',12,'Grand Lake area','Wild blueberries, specialty products.','farms');
+ap(45.4000,-67.8000,'#F59E0B',12,'Topsfield farms','Mixed farming. Potatoes, produce.','farms');
+ap(46.2000,-67.7500,'#F59E0B',13,'Houlton Farmers Market','Market Sq, Sat 9am-1pm. Multiple vendors.','farms');
+ap(45.3000,-67.3500,'#F59E0B',12,'Downeast farms','Baileyville/Princeton. Blueberries, maple, honey.','farms');
+
+ap(46.1290,-67.8380,'#EC4899',13,'The Vault Restaurant','64 Main St, Houlton. Steak, seafood. Takeout available.','restaurants');
+ap(46.1260,-67.8410,'#EC4899',13,'Market Pizza','Houlton. Best-rated pizza. High takeout volume.','restaurants');
+ap(46.1275,-67.8360,'#EC4899',12,'Bastions Tavern','43 Market Sq, Houlton. Burgers, wings, pub food.','restaurants');
+ap(46.1330,-67.8300,'#EC4899',13,'TNT Takeout','69 High St, Houlton. Subs, pizza. Already delivers locally.','restaurants');
+ap(46.1280,-67.8450,'#EC4899',12,'Tang\'s Chinese','60 North St, Houlton. Already does delivery.','restaurants');
+ap(46.1310,-67.8370,'#EC4899',12,'Taste of China','127 Military St, Houlton. Buffet + takeout.','restaurants');
+ap(46.1350,-67.8310,'#EC4899',12,'Elm Tree Diner','Houlton. Breakfast all day. Comfort food.','restaurants');
+ap(46.1240,-67.8490,'#EC4899',12,'Ivey\'s Bistro','241 North St, Houlton. Daily 11am-9pm.','restaurants');
+ap(46.1370,-67.8320,'#EC4899',11,'Houlton Farms Dairy Bar','131 Military St. Seasonal.','restaurants');
+ap(46.1245,-67.8470,'#EC4899',11,'Downunder Pub','282 North St, Houlton. Pub food, live music.','restaurants');
+ap(45.1860,-67.2790,'#EC4899',13,'Jo\'s Diner & Pizzeria','195 Main St, Calais. Pizza, pasta, diner fare.','restaurants');
+ap(45.1850,-67.2810,'#EC4899',13,'Karen\'s Diner','439 Main St, Calais. Breakfast all day.','restaurants');
+ap(45.1840,-67.2830,'#EC4899',13,'Nook & Cranny','Baileyville. Eclectic menu. "Best kept secret."','restaurants');
+ap(45.1870,-67.2770,'#EC4899',12,'King China','Calais. Chinese/Asian takeout.','restaurants');
+ap(45.1865,-67.2820,'#EC4899',12,'Crumbs Cafe','Calais. Pastries, sandwiches, coffee.','restaurants');
+ap(45.1855,-67.2800,'#EC4899',12,'The Sandwich Man','382 North St, Calais. Subs, lobster rolls.','restaurants');
+ap(45.1845,-67.2760,'#EC4899',13,'St Croix Tap & Table','421 Main St, Calais. Gastropub. Has online ordering.','restaurants');
+ap(45.1835,-67.2840,'#EC4899',11,'Wickachee Dining Room','282 Main St, Calais. American classics.','restaurants');
+ap(45.3650,-68.5100,'#EC4899',12,'Lincoln restaurants','Multiple dining options. Route add-ons.','restaurants');
+
+var nhd=[
+{c:[45.66,-67.85],r:8000,n:'Danforth core',p:'~590',t:'Home base. First customers.'},
+{c:[45.60,-67.81],r:6000,n:'Weston / Bancroft',p:'~300',t:'Nearby. Easy door delivery.'},
+{c:[45.44,-67.76],r:7000,n:'Topsfield / Kossuth',p:'~250',t:'Hub at Topsfield Country Store.'},
+{c:[46.13,-67.84],r:12000,n:'Houlton',p:'~5,880',t:'Largest town. Walmart + Hannaford + 10 restaurants.'},
+{c:[45.19,-67.28],r:10000,n:'Calais',p:'~3,100',t:'East hub. IGA + Walmart + 8 restaurants.'},
+{c:[45.36,-68.50],r:10000,n:'Lincoln',p:'~5,000',t:'West hub. Hannaford + restaurants.'},
+{c:[45.23,-67.57],r:6000,n:'Princeton',p:'~900',t:'Mid-route. Food Mart IGA.'},
+{c:[45.80,-68.10],r:7000,n:'Haynesville / Reed',p:'~200',t:'Remote. High need, low density.'},
+{c:[45.50,-67.48],r:5000,n:'Grand Lake Stream',p:'~100',t:'Fishing village. Seasonal spike.'},
+{c:[45.95,-67.85],r:6000,n:'Oakfield / Smyrna',p:'~800',t:'Route 2 to Houlton. Amish nearby.'},
+];
+nhd.forEach(function(n){
+  var c=L.circle(n.c,{radius:n.r,color:'#A855F7',fillColor:'#A855F7',fillOpacity:0.12,weight:isMob?1.5:2});
+  c.bindPopup('<div style="font-family:system-ui;min-width:160px;max-width:240px;"><div style="font-weight:600;font-size:13px;">'+n.n+'</div><div style="font-size:11px;color:#555;line-height:1.35;">Pop: '+n.p+'<br>'+n.t+'</div></div>',{maxWidth:240,autoPanPadding:[20,20]});
+  c.addTo(M);gr.neighborhoods.push(c);
+});
+
+function tog(k){
+  ly[k]=!ly[k];
+  gr[k].forEach(function(m){if(ly[k])m.addTo(M);else M.removeLayer(m)});
+  var b=document.getElementById('b-'+k);
+  if(b)b.style.opacity=ly[k]?1:0.4;
+}
+function all(){
+  Object.keys(ly).forEach(function(k){
+    ly[k]=true;
+    gr[k].forEach(function(m){m.addTo(M)});
+    var b=document.getElementById('b-'+k);
+    if(b)b.style.opacity=1;
+  });
+}
+
+window.addEventListener('resize',function(){M.invalidateSize()});
+</script>
