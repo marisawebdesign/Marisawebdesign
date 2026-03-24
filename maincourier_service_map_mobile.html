@@ -94,7 +94,7 @@ if(svcArea){
   }}).addTo(M);
 }
 
-var ps=isMob?0.75:1;
+var ps=isMob?1.2:1.6;
 function ic(c,s){var sz=Math.round(s*ps);return L.divIcon({className:'',html:'<div style="width:'+sz+'px;height:'+sz+'px;border-radius:50%;background:'+c+';border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,0.5);"></div>',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2],popupAnchor:[0,-sz/2]})}
 
 var ly={unpartnered:true,partner:true,farms:true,restaurants:true,neighborhoods:true};
@@ -106,7 +106,7 @@ function ap(a,b,c,s,l,d,k){
   m.addTo(M);gr[k].push(m);
 }
 
-var hi=L.divIcon({className:'',html:'<div style="width:18px;height:18px;border-radius:50%;background:#DC2626;border:3px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,0.6);"></div>',iconSize:[18,18],iconAnchor:[9,9],popupAnchor:[0,-9]});
+var hi=L.divIcon({className:'',html:'<div style="width:26px;height:26px;border-radius:50%;background:#DC2626;border:3px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,0.6);"></div>',iconSize:[26,26],iconAnchor:[13,13],popupAnchor:[0,-13]});
 L.marker(D,{icon:hi}).addTo(M).bindPopup('<div style="font-family:system-ui;"><div style="font-weight:600;font-size:13px;">Danforth, ME 04424</div><div style="font-size:11px;color:#555;">MainCourier HQ. Pop ~590.</div></div>',{maxWidth:220});
 
 ap(46.1319,-67.8344,'#3B82F6',16,'Walmart Supercenter','Houlton, 35 mi. Grocery, pharmacy, household. Primary batch route.','unpartnered');
