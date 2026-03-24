@@ -38,6 +38,7 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
 <script>
 var isMob=window.innerWidth<600;
 var M=L.map('map',{scrollWheelZoom:true,tap:true,dragging:true,touchZoom:true,zoomControl:!isMob}).setView([45.66,-67.88],isMob?8:9);
@@ -47,7 +48,51 @@ L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/Worl
 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,opacity:0.9}).addTo(M);
 
 var D=[45.6612,-67.8534];
-L.circle(D,{radius:80467,color:'#fff',fillColor:'#3B82F6',fillOpacity:0.07,weight:isMob?1.5:2,dashArray:'10,6'}).addTo(M);
+
+// US territory polygon covering Maine. The eastern edge traces the ME/NB
+// international boundary (Webster-Ashburton Treaty line) from Calais/St. Croix
+// River north through Vanceboro and Houlton to the QC border.
+// GeoJSON coordinates are [lng, lat]; outer ring is counter-clockwise.
+var usArea=turf.polygon([[
+  [-72.0, 43.0],
+  [-68.5, 43.0],
+  [-67.5, 44.0],
+  [-67.0, 44.5],
+  [-66.95, 44.81],  // Near Eastport / Lubec coast
+  [-67.22, 45.18],  // Calais / St. Croix River border crossing
+  [-67.33, 45.40],  // Border heading NW
+  [-67.44, 45.56],  // Vanceboro / McAdam border crossing
+  [-67.55, 45.68],  // Border continuing NW
+  [-67.68, 45.82],  // Border
+  [-67.76, 45.97],  // Border
+  [-67.82, 46.13],  // Houlton / Woodstock border crossing
+  [-67.83, 46.35],  // Border heading NW
+  [-67.85, 46.58],  // Border
+  [-67.86, 46.85],  // Border (near Caribou / Presque Isle)
+  [-68.0,  47.1 ],  // ME/NB/QC corner region
+  [-68.4,  47.28],  // Northern ME boundary
+  [-69.2,  47.28],
+  [-70.0,  47.5 ],
+  [-72.0,  47.5 ],
+  [-72.0,  43.0 ]   // Close ring back to SW corner
+]]);
+
+// 50-mile (80.47 km) great-circle radius from Danforth HQ.
+// Turf expects center as [lng, lat].
+var svcCircle=turf.circle([D[1],D[0]],80.47,{steps:128,units:'kilometers'});
+
+// Clip the circle to US territory – this removes the Canadian slice.
+var svcArea=turf.intersect(usArea,svcCircle);
+
+if(svcArea){
+  L.geoJSON(svcArea,{style:{
+    color:'#fff',
+    fillColor:'#3B82F6',
+    fillOpacity:0.07,
+    weight:isMob?1.5:2,
+    dashArray:'10,6'
+  }}).addTo(M);
+}
 
 var ps=isMob?0.75:1;
 function ic(c,s){var sz=Math.round(s*ps);return L.divIcon({className:'',html:'<div style="width:'+sz+'px;height:'+sz+'px;border-radius:50%;background:'+c+';border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,0.5);"></div>',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2],popupAnchor:[0,-sz/2]})}
